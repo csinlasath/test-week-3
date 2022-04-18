@@ -1,6 +1,8 @@
+// Max Range for Password
 var MINIMUM_PASSWORD_LENGTH = 8;
 var MAXIMUM_PASSWORD_LENGTH = 128;
 
+// ASCII Character Code Ranges for build character pools
 var STARTING_RANGE_UPPERCASE_CODE = 65;
 var ENDING_RANGE_UPPERCASE_CODE = 90;
 var STARTING_RANGE_LOWERCASE_CODE = 97;
@@ -8,8 +10,10 @@ var ENDING_RANGE_LOWERCASE_CODE = 122;
 var STARTING_RANGE_DIGIT_CODE = 48;
 var ENDING_RANGE_DIGIT_CODE = 57;
 
+// Selector to generate password.  See Week 4 Modules/Activities.
 var generateBtn = document.querySelector("#generate");
 
+// Recursive prompts until we get valid password length.
 function getPasswordLength() {
   var passwordLength = Number.parseInt(
     prompt(
@@ -37,6 +41,7 @@ function getPasswordLength() {
   return passwordLength;
 }
 
+// Get criteria for what type of password we should be adding to our pool.
 function getCharacterCriteria() {
   var wantsNumbers = confirm("Would you like numbers?");
   var wantsLowerCaseLetters = confirm("Would you like lowercase letters?");
@@ -64,6 +69,7 @@ function getCharacterCriteria() {
   return characterCriteria;
 }
 
+// Build Array with ascii character ranges for us to use to build passwords
 function buildCharacterPool(startingRangeCode, endingRangeCode) {
   var characterPool = [];
   for (var i = startingRangeCode; i <= endingRangeCode; i++) {
@@ -73,21 +79,25 @@ function buildCharacterPool(startingRangeCode, endingRangeCode) {
   return characterPool;
 }
 
+// Get a random character from a specific character pool.  Arrays are 0 based.
 function getRandomCharacter(characterPool) {
   var randomIndex = Math.floor(Math.random() * characterPool.length);
   var randomCharacter = characterPool[randomIndex];
   return randomCharacter;
 }
 
+// Mutate generated password.
 function addCharacterToPassword(characterCriteria, randomCharacter) {
   return (characterCriteria.generatedPassword += randomCharacter);
 }
 
+// Create master pool for remaining characters
 function addCharactersToMasterPool(characterCriteria, newCharacterPool) {
   return (characterCriteria.completeCharacterPool =
     characterCriteria.completeCharacterPool.concat(newCharacterPool));
 }
 
+// Basic Random Shuffle.  Used to shuffle passwords and arrays.
 function shuffleString(str) {
   var strAsArray = str.split("");
   var currentIndex = strAsArray.length;
@@ -103,6 +113,7 @@ function shuffleString(str) {
   return strAsArray.join("");
 }
 
+// Function brings it all together.  This is what the UI will run when the button is pressed.
 function generatePassword() {
   var requestedPasswordLength = getPasswordLength();
   var characterCriteria = getCharacterCriteria();
@@ -144,6 +155,7 @@ function generatePassword() {
   }
 
   if (characterCriteria.wantsSpecialCharacters) {
+    // Valid Special Characters.  ASCII ranges wasn't clean enough in my opinion.
     var specialCharacterPool = [
       "!",
       "#",
@@ -167,6 +179,7 @@ function generatePassword() {
     characterCriteria.completeCharacterPool.join("")
   ).split("");
 
+  // Now that required characters are selected.  Fill out with random characters from master pool until password is completed.
   for (
     var i = characterCriteria.generatedPassword.length;
     i < requestedPasswordLength;
@@ -182,6 +195,7 @@ function generatePassword() {
   return shuffleString(characterCriteria.generatedPassword);
 }
 
+// Write generated password to the DOM.
 function writePasswordToPage() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
@@ -189,4 +203,5 @@ function writePasswordToPage() {
   passwordText.value = password;
 }
 
+// Add Event Listener to button that is on the page.
 generateBtn.addEventListener("click", writePasswordToPage);
