@@ -25,7 +25,7 @@ function getPasswordLength() {
     alert(
       "Your requested length was not a number or not defined.  Please input a numeric value for password length."
     );
-    getPasswordLength();
+    return getPasswordLength();
   }
 
   if (
@@ -64,7 +64,7 @@ function getCharacterCriteria() {
     alert(
       "No character types were selected.  Please ensure that at least one type is selected to generate your password."
     );
-    getCharacterCriteria();
+    return getCharacterCriteria();
   }
   return characterCriteria;
 }
