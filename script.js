@@ -35,7 +35,7 @@ function getPasswordLength() {
     alert(
       "Your password does not meet the length requirements of code.  Please try again."
     );
-    getPasswordLength();
+    return getPasswordLength();
   }
 
   return passwordLength;
